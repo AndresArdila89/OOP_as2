@@ -42,10 +42,7 @@ public class Main
 		inventory.addComputer("APPLE", "iMac", 654321, 100.50);
 		inventory.addComputer("ASUS", "ROG", 123456, 300.50);
 		inventory.addComputer("HP", "Pavilion", 123456, 200.50);
-
-		inventory.getNumberOfComputers();
-
-		System.out.println("------------------------------------------------");
+		System.out.println("Computers in store: " + inventory.getNumberOfComputers());
 		System.out.println("------------------------------------------------");
 
 		// Main Menu
@@ -54,56 +51,173 @@ public class Main
 		{
 
 			System.out.print(Store.getMenu());
-
-			switch (Store.setOption(scanner))
+			menuOption = Store.setOption(scanner);
+			switch (menuOption)
 			{
 			case 1:
 				System.out.println("menue 1:");
 				if (Store.pwdVerification(scanner))
-				{ 
+				{
 					System.out.println("------------------------------------------------");
-					System.out.print("\tAccess granted");
+					System.out.println("\tAccess granted");
 					System.out.println("------------------------------------------------");
-					
-					System.out.println("how many computers you want to add: ");
-					int addNumber = scanner.nextInt();
+
+					int addNumber = 0;
 					int freeSpace = inventory.getFreeSpace();
-					if( addNumber > freeSpace) {
-						System.out.println("Only " + freeSpace + " left");
+
+					do
+					{
+						System.out.println("how many computers you want to add: ");
+						addNumber = scanner.nextInt();
+
+						if (addNumber > freeSpace)
+						{
+							System.out.println("Only " + freeSpace + " left");
+						}
+
+					} while (addNumber > freeSpace);
+
+					while (addNumber > 0)
+					{
+						addNumber--;
+						scanner.nextLine();
+						System.out.println("------------- Adding New Computer --------------");
+						System.out.println("Brand:");
+						String brand = scanner.nextLine();
+						System.out.println("Model:");
+						String model = scanner.nextLine();
+						System.out.println("Serial Number:");
+						long sn = scanner.nextLong();
+						System.out.println("Price:");
+						double price = scanner.nextDouble();
+
+						inventory.addComputer(brand, model, sn, price);
+
 					}
-					
 				}
 				else
 				{
 					System.out.println("------------------------------------------------");
-					System.out.println("\tWrong Password");	
+					System.out.println("\tWrong Password");
 					System.out.println("------------------------------------------------");
 				}
 				break;
 			case 2:
-				System.out.print("menue 2:");
+				System.out.println("menue 2:");
 				if (Store.pwdVerification(scanner))
-				{ 
+				{ // search by index and update the object
+					// if there is no object prompt the user to add a new item
+					// else cancel the operation
 					System.out.println("------------------------------------------------");
-					System.out.print("\tAccess granted");
+					System.out.println("\tAccess granted");
 					System.out.println("------------------------------------------------");
+					int index = 0;
+					do
+					{
+						System.out.println("Which computer whould you like to Update:");
+						index = scanner.nextInt();
+					} while (index < 1 || index >= inventory.getMaxCapacity());
+
+					if (inventory.search(index) == null)
+					{
+						System.out.println("The computer is not on the inventory");
+						System.out.println("Whould you like to add a new computer (y/n)");
+						scanner.nextLine();
+						String answer = scanner.nextLine();
+						if (answer.equals("y"))
+						{
+							System.out.println("------------- Adding New Computer --------------");
+							System.out.println("Brand:");
+							String brand = scanner.nextLine();
+							System.out.println("Model:");
+							String model = scanner.nextLine();
+							System.out.println("Serial Number:");
+							long sn = scanner.nextLong();
+							System.out.println("Price:");
+							double price = scanner.nextDouble();
+
+							inventory.addComputer(brand, model, sn, price);
+						}
+						else
+						{
+							break;
+						}
+
+					}
+					else
+					{
+
+						Computer updatedComputer = inventory.search(index);
+						int option = 0;
+						while (option != 5)
+						{
+
+							System.out.println(updatedComputer.toString());
+							System.out.println("What information would you like to change?");
+							System.out.println("\t1. Brand \n\t2. Model \n\t3. SN \n\t4. price \n\t5. Quit");
+							option = scanner.nextInt();
+							scanner.nextLine();
+							switch (option)
+							{
+							case 1:
+								System.out.println("Update Brand: ");
+								updatedComputer.setBrand(scanner.nextLine());
+								System.out.println("Product Updated ...");
+
+								break;
+							case 2:
+								System.out.println("Update Model: ");
+								updatedComputer.setModel(scanner.nextLine());
+								System.out.println("Product Updated ...");
+
+								break;
+							case 3:
+								System.out.println("Update SN: ");
+								updatedComputer.setSerialNumber(scanner.nextLong());
+								System.out.println("Product Updated ...");
+
+								break;
+							case 4:
+								System.out.println("Update Price: ");
+								updatedComputer.setPrice(scanner.nextDouble());
+								System.out.println("Product Updated ...");
+
+								break;
+							case 5:
+								break;
+							default:
+								System.out.print("select and option between 1-5");
+							}
+						}
+					}
 				}
 				else
 				{
 					System.out.println("------------------------------------------------");
-					System.out.println("\tWrong Password");	
+					System.out.println("\tWrong Password");
 					System.out.println("------------------------------------------------");
 				}
 				break;
 			case 3:
-				System.out.print("menue 3:");
+				System.out.println("menue 3:");
+				System.out.println("Enter a brand:");
+				scanner.nextLine();
+				String brand = scanner.nextLine();
+				inventory.search(brand, "brand");
 				break;
 			case 4:
-				System.out.print("menue 4:");
+				System.out.println("menue 4:");
+				System.out.println("Enter a price:");
+				double price = scanner.nextDouble();
+				inventory.search(price);
 				break;
 			case 5:
-				System.out.print("menue 5:");
+				
+				System.out.println("------------------------------------------------");
+				System.out.println("\t\tThank you!!!!");
+				System.out.println("------------------------------------------------");
 				break;
+				
 			}
 
 		}

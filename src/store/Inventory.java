@@ -4,6 +4,7 @@ public class Inventory
 {
 	private Computer[] computers;
 	private int maxCapacity;
+	
 
 	public Inventory(int inventoryCapacity)
 	{
@@ -12,7 +13,7 @@ public class Inventory
 		System.out.println("Inventory created max capacity set to " + inventoryCapacity);
 	}// End of constructor Inventory
 
-	public void getNumberOfComputers()
+	public int getNumberOfComputers()
 	{
 		int counter = 0;
 		for (int i = 0; i < maxCapacity; i++)
@@ -22,8 +23,20 @@ public class Inventory
 				counter++;
 			}
 		}
-		System.out.println("Computers in store: " + counter);
+		
+		return counter;
 	}// End of method getNumberOfComputers
+	
+	public int getMaxCapacity() {
+		return maxCapacity;
+	}
+
+	public int getFirstEmptyElementIndex()
+	{
+		int stock = getNumberOfComputers();
+		int index = maxCapacity - stock;
+		return index;
+	}// End method getFirstEmptyElementIndex
 
 	public void addComputer(String brand, String model, long sn, double price)
 	{
@@ -37,7 +50,7 @@ public class Inventory
 				if (computers[i] == null)
 				{
 					computers[i] = comp;
-					System.out.println("Computer added");
+					System.out.println("Computer added...");
 					break;
 				}
 			}
@@ -51,7 +64,6 @@ public class Inventory
 
 	public Computer search(int id)
 	{
-
 		return computers[id];
 	}
 
@@ -66,6 +78,7 @@ public class Inventory
 				if (computers[i] != null && computers[i].getBrand().equals(value))
 				{
 					counter++;
+					System.out.println("-----------------Computer " + counter + "---------------------");
 					System.out.println(computers[i].toString());
 				}
 			}
@@ -76,6 +89,7 @@ public class Inventory
 				if (computers[i] != null && computers[i].getModel().equals(value))
 				{
 					counter++;
+					System.out.println("-----------------Computer " + counter + "---------------------");
 					System.out.println(computers[i].toString());
 				}
 			}
@@ -103,14 +117,16 @@ public class Inventory
 			System.out.println("No item found");
 		}
 	}// End of method search by serial number
-	
-	public void search(double price) {
+
+	public void search(double price)
+	{
 		int counter = 0;
 		for (int i = 0; i < maxCapacity; i++)
 		{
 			if (computers[i] != null && computers[i].getPrice() < price)
 			{
 				counter++;
+				System.out.println("-----------------Computer " + counter + "---------------------");
 				System.out.println(computers[i].toString());
 			}
 		}
@@ -119,8 +135,9 @@ public class Inventory
 			System.out.println("No item found");
 		}
 	}// End of method search by lower price
-	
-	public int getFreeSpace() {
+
+	public int getFreeSpace()
+	{
 		int counter = 0;
 		for (int i = 0; i < maxCapacity; i++)
 		{
@@ -129,11 +146,8 @@ public class Inventory
 				counter++;
 			}
 		}
-		
-		
+
 		return maxCapacity - counter;
 	}
-	
-	
 
 }// End of class Inventory
